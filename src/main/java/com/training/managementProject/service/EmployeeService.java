@@ -5,6 +5,7 @@ import com.training.managementProject.dto.model.EmployeeDto;
 import com.training.managementProject.model.Employee;
 import com.training.managementProject.repository.EmployeeRepository;
 import javassist.bytecode.DuplicateMemberException;
+import net.bytebuddy.implementation.bytecode.Throw;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,24 +32,32 @@ public class EmployeeService {
 
     // Get one
     public EmployeeDto getEmployee(int id){
-        return EmployeeMapper.toEmployeeDto(employeeRepository.findById(id).orElseThrow(EntityNotFoundException::new));
+        return EmployeeMapper.toEmployeeDto(employeeRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("Cannot find Employee with the id " + id)
+        ));
     }
 
     // Add
-    public void addEmployee(EmployeeDto employee){
-//        if(employeeRepository.existsById(employee.getId()) == true)
-//            throw new DuplicateMemberException();
-//        else
+    public void addEmployee(EmployeeDto employee) throws DuplicateMemberException {
+        if(employeeRepository.existsById(employee.getId()))
+            throw new DuplicateMemberException("Employee with id " + employee.getId() + " already exists");
+        else
             employeeRepository.save(EmployeeMapper.toEmployee(employee));
     }
 
     // Update
     public void updateEmployee(EmployeeDto employee){
+        employeeRepository.findById(employee.getId()).orElseThrow(
+                () -> new EntityNotFoundException("Cannot find Employee with the id " + employee.getId())
+        );
         employeeRepository.save(EmployeeMapper.toEmployee(employee));
     }
 
     // Delete
     public void deleteEmployee(int id){
+        employeeRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("Cannot find Employee with the id " + id)
+        );
         employeeRepository.deleteById(id);
     }
 
