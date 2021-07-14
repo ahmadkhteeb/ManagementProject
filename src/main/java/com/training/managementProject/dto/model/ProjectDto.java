@@ -1,4 +1,4 @@
-package com.training.managementProject.model;
+package com.training.managementProject.dto.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -9,10 +9,6 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import java.util.Date;
 
 @Getter
@@ -22,14 +18,13 @@ import java.util.Date;
 @ToString
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-@Entity
-public class Status {
+public class ProjectDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date date;
-    private String description;
+    private Date startTime;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date deadline;
+
 }

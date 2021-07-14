@@ -16,7 +16,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(EntityNotFoundException.class)
     protected ResponseEntity<Object> handleEntityNotFound(EntityNotFoundException exception){
         ApiError apiError = new ApiError(
-                HttpStatus.NOT_FOUND,
+                HttpStatus.NOT_FOUND.value(),
                 exception.getMessage(),
                 exception
         );
@@ -28,7 +28,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(DuplicateMemberException.class)
     protected ResponseEntity<Object> handleDuplicateMemberException(DuplicateMemberException exception){
         ApiError apiError = new ApiError(
-                HttpStatus.CONFLICT,
+                HttpStatus.CONFLICT.value(),
                 exception.getMessage(),
                 exception
         );

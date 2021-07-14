@@ -12,14 +12,14 @@ import java.util.List;
 @Getter
 class ApiError {
 
-    private HttpStatus status;
+    private int status;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private LocalDateTime timestamp;
     private String message;
     private String debugMessage;
     private List<ApiSubError> subErrors;
 
-    public ApiError(HttpStatus status, String message, Throwable exception){
+    public ApiError(int status, String message, Throwable exception){
         this.status = status;
         this.message = message;
         this.debugMessage = exception.getLocalizedMessage();
