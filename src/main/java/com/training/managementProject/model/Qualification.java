@@ -9,11 +9,11 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
 @Getter
 @Setter
 @Accessors(chain = true)
@@ -27,4 +27,8 @@ public class Qualification {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
+
+    // Employee - Qualification Relation
+    @ManyToMany(mappedBy = "qualifications")
+    private List<Employee> employees = new ArrayList<>();
 }

@@ -9,11 +9,10 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -33,4 +32,25 @@ public class Task {
     private Date startTime;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date deadline;
+
+    // Employee - Task Relation
+    @ManyToMany(mappedBy = "tasks")
+    private List<Employee> employees = new ArrayList<>();
+
+    // Project - Task Relation
+    @ManyToOne
+    @JoinColumn(name = "project_id")
+    private Project project;
+
+    // Task - Status Relation
+    @OneToMany(mappedBy = "task")
+    private List<Status> statuses = new ArrayList<>();
+
+    // Task - Task Relation
+    @OneToMany(mappedBy = "superTask")
+    private List<Task> subTasks = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name = "subtask_id")
+    private Task superTask;
+
 }

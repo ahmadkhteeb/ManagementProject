@@ -9,11 +9,10 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -32,4 +31,14 @@ public class Status {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date date;
     private String description;
+
+    // Project - Status Relation
+    @ManyToOne
+    @JoinColumn(name = "project_id")
+    private Project project;
+
+    // Task - Status Relation
+    @ManyToOne
+    @JoinColumn(name = "task_id")
+    private Task task;
 }
