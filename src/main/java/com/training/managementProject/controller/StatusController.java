@@ -1,6 +1,6 @@
 package com.training.managementProject.controller;
 
-import com.training.managementProject.dto.model.StatusDto;
+import com.training.managementProject.dto.model.StatusDTO;
 import com.training.managementProject.service.StatusService;
 import javassist.bytecode.DuplicateMemberException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,22 +21,22 @@ public class StatusController {
     }
 
     @RequestMapping(path = "/api/v1/statuses")
-    public List<StatusDto> getStatuses(){
+    public List<StatusDTO> getStatuses(){
         return statusService.getStatuses();
     }
 
     @RequestMapping(path = "/api/v1/statuses/{id}")
-    public StatusDto getStatus(@PathVariable int id){
+    public StatusDTO getStatus(@PathVariable int id){
         return statusService.getStatus(id);
     }
 
     @RequestMapping(method = RequestMethod.POST, path = "/api/v1/statuses")
-    public void addStatus(@RequestBody StatusDto statusDto) throws DuplicateMemberException {
+    public void addStatus(@RequestBody StatusDTO statusDto) throws DuplicateMemberException {
         statusService.addStatus(statusDto);
     }
 
     @RequestMapping(method = RequestMethod.PUT, path = "/api/v1/statuses")
-    public void updateStatus(@RequestBody StatusDto statusDto){
+    public void updateStatus(@RequestBody StatusDTO statusDto){
         statusService.updateStatus(statusDto);
     }
 

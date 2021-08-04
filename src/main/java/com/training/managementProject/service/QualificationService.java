@@ -1,7 +1,8 @@
 package com.training.managementProject.service;
 
-import com.training.managementProject.dto.mapper.QualificationMapper;
-import com.training.managementProject.dto.model.QualificationDto;
+import com.training.managementProject.dto.mapper.ObjectMapperUtils;
+import com.training.managementProject.dto.model.QualificationDTO;
+import com.training.managementProject.model.Qualification;
 import com.training.managementProject.repository.QualificationRepository;
 import javassist.bytecode.DuplicateMemberException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,31 +25,31 @@ public class QualificationService {
     // Basic CRUD Operations implementation
 
     // Get all
-    public List<QualificationDto> getQualifications(){
-        return qualificationRepository.findAll().stream().map(QualificationMapper::toQualificationDto).collect(Collectors.toList());
+    public List<QualificationDTO> getQualifications(){
+        return ObjectMapperUtils.mapAll(qualificationRepository.findAll(), QualificationDTO.class);
     }
 
     // Get one
-    public QualificationDto getQualification(int id){
-        return QualificationMapper.toQualificationDto(qualificationRepository.findById(id).orElseThrow(
+    public QualificationDTO getQualification(int id){
+        return ObjectMapperUtils.map(qualificationRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("Cannot find Qualification with the id " + id)
-        ));
+        ), QualificationDTO.class);
     }
 
     // Add
-    public void addQualification(QualificationDto qualification) throws DuplicateMemberException {
+    public void addQualification(QualificationDTO qualification) throws DuplicateMemberException {
         if(qualificationRepository.existsById(qualification.getId()))
             throw new DuplicateMemberException("Qualification with id " + qualification.getId() + " already exists");
         else
-            qualificationRepository.save(QualificationMapper.toQualification(qualification));
+            qualificationRepository.save(ObjectMapperUtils.map(qualification, Qualification.class));
     }
 
     // Update
-    public void updateQualification(QualificationDto qualification){
+    public void updateQualification(QualificationDTO qualification){
         qualificationRepository.findById(qualification.getId()).orElseThrow(
                 () -> new EntityNotFoundException("Cannot find Qualification with the id " + qualification.getId())
         );
-        qualificationRepository.save(QualificationMapper.toQualification(qualification));
+        qualificationRepository.save(ObjectMapperUtils.map(qualification, Qualification.class));
     }
 
     // Delete

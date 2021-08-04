@@ -1,7 +1,8 @@
 package com.training.managementProject.service;
 
-import com.training.managementProject.dto.mapper.StatusMapper;
-import com.training.managementProject.dto.model.StatusDto;
+import com.training.managementProject.dto.mapper.ObjectMapperUtils;
+import com.training.managementProject.dto.model.StatusDTO;
+import com.training.managementProject.model.Status;
 import com.training.managementProject.repository.StatusRepository;
 import javassist.bytecode.DuplicateMemberException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,31 +25,31 @@ public class StatusService {
     // Basic CRUD Operations implementation
 
     // Get all
-    public List<StatusDto> getStatuses(){
-        return statusRepository.findAll().stream().map(StatusMapper::toStatusDto).collect(Collectors.toList());
+    public List<StatusDTO> getStatuses(){
+        return ObjectMapperUtils.mapAll(statusRepository.findAll(), StatusDTO.class);
     }
 
     // Get one
-    public StatusDto getStatus(int id){
-        return StatusMapper.toStatusDto(statusRepository.findById(id).orElseThrow(
+    public StatusDTO getStatus(int id){
+        return ObjectMapperUtils.map(statusRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("Cannot find Status with the id " + id)
-        ));
+        ), StatusDTO.class);
     }
 
     // Add
-    public void addStatus(StatusDto status) throws DuplicateMemberException {
+    public void addStatus(StatusDTO status) throws DuplicateMemberException {
         if(statusRepository.existsById(status.getId()))
             throw new DuplicateMemberException("Status with id " + status.getId() + " already exists");
         else
-            statusRepository.save(StatusMapper.toStatus(status));
+            statusRepository.save(ObjectMapperUtils.map(status, Status.class));
     }
 
     // Update
-    public void updateStatus(StatusDto status){
+    public void updateStatus(StatusDTO status){
         statusRepository.findById(status.getId()).orElseThrow(
                 () -> new EntityNotFoundException("Cannot find Status with the id " + status.getId())
         );
-        statusRepository.save(StatusMapper.toStatus(status));
+        statusRepository.save(ObjectMapperUtils.map(status, Status.class));
     }
 
     // Delete

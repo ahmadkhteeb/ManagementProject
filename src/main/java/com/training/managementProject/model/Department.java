@@ -1,7 +1,6 @@
 package com.training.managementProject.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,6 +19,7 @@ import java.util.List;
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Entity
+
 public class Department {
 
     @Id()
@@ -31,4 +31,12 @@ public class Department {
     // Employee - Department Relation
     @OneToMany(mappedBy = "department")
     private List<Employee> employees = new ArrayList<>();
+
+    public void addEmployee(Employee employee){
+        employees.add(employee);
+    }
+
+    public void deleteEmployee(Employee employee){
+        employees.remove(employee);
+    }
 }

@@ -1,7 +1,12 @@
 package com.training.managementProject.service;
 
-import com.training.managementProject.dto.mapper.ProjectMapper;
-import com.training.managementProject.dto.model.ProjectDto;
+import com.training.managementProject.dto.mapper.ObjectMapperUtils;
+import com.training.managementProject.dto.model.ProjectDTO;
+import com.training.managementProject.dto.model.StatusDTO;
+import com.training.managementProject.dto.model.TaskDTO;
+import com.training.managementProject.model.Project;
+import com.training.managementProject.model.Status;
+import com.training.managementProject.model.Task;
 import com.training.managementProject.repository.ProjectRepository;
 import javassist.bytecode.DuplicateMemberException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class ProjectService {
@@ -24,31 +28,31 @@ public class ProjectService {
     // Basic CRUD Operations implementation
 
     // Get all
-    public List<ProjectDto> getProjects(){
-        return projectRepository.findAll().stream().map(ProjectMapper::toProjectDto).collect(Collectors.toList());
+    public List<ProjectDTO> getProjects(){
+        return ObjectMapperUtils.mapAll(projectRepository.findAll(), ProjectDTO.class);
     }
 
     // Get one
-    public ProjectDto getProject(int id){
-        return ProjectMapper.toProjectDto(projectRepository.findById(id).orElseThrow(
+    public ProjectDTO getProject(int id){
+        return ObjectMapperUtils.map(projectRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("Cannot find Project with the id " + id)
-        ));
+        ), ProjectDTO.class);
     }
 
     // Add
-    public void addProject(ProjectDto project) throws DuplicateMemberException {
+    public void addProject(ProjectDTO project) throws DuplicateMemberException {
         if(projectRepository.existsById(project.getId()))
             throw new DuplicateMemberException("Project with id " + project.getId() + " already exists");
         else
-            projectRepository.save(ProjectMapper.toProject(project));
+            projectRepository.save(ObjectMapperUtils.map(project, Project.class));
     }
 
     // Update
-    public void updateProject(ProjectDto project){
+    public void updateProject(ProjectDTO project){
         projectRepository.findById(project.getId()).orElseThrow(
                 () -> new EntityNotFoundException("Cannot find Project with the id " + project.getId())
         );
-        projectRepository.save(ProjectMapper.toProject(project));
+        projectRepository.save(ObjectMapperUtils.map(project, Project.class));
     }
 
     // Delete
@@ -58,5 +62,25 @@ public class ProjectService {
         );
         projectRepository.deleteById(id);
     }
+
+    public void addTask(TaskDTO task) {
+        projectRepository.addTask(ObjectMapperUtils.map(task, Task.class));
+    }
+
+    public void deleteTask(TaskDTO task) {
+        projectRepository.deleteTask(ObjectMapperUtils.map(task, Task.class));
+    }
+
+    public void addStatus(StatusDTO status) {
+        projectRepository.addStatus(ObjectMapperUtils.map(status, Status.class));
+    }
+
+    public void deleteStatus(StatusDTO status) {
+        projectRepository.deleteStatus(ObjectMapperUtils.map(status, Status.class));
+    }
+
+
+
+
 
 }

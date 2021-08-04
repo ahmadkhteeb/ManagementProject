@@ -1,6 +1,6 @@
 package com.training.managementProject.controller;
 
-import com.training.managementProject.dto.model.QualificationDto;
+import com.training.managementProject.dto.model.QualificationDTO;
 import com.training.managementProject.service.QualificationService;
 import javassist.bytecode.DuplicateMemberException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,22 +21,22 @@ public class QualificationController {
     }
 
     @RequestMapping(path = "/api/v1/qualifications")
-    public List<QualificationDto> getQualifications(){
+    public List<QualificationDTO> getQualifications(){
         return qualificationService.getQualifications();
     }
 
     @RequestMapping(path = "/api/v1/qualifications/{id}")
-    public QualificationDto getQualification(@PathVariable int id){
+    public QualificationDTO getQualification(@PathVariable int id){
         return qualificationService.getQualification(id);
     }
 
     @RequestMapping(method = RequestMethod.POST, path = "/api/v1/qualifications")
-    public void addQualification(@RequestBody QualificationDto qualificationDto) throws DuplicateMemberException {
+    public void addQualification(@RequestBody QualificationDTO qualificationDto) throws DuplicateMemberException {
         qualificationService.addQualification(qualificationDto);
     }
 
     @RequestMapping(method = RequestMethod.PUT, path = "/api/v1/qualifications")
-    public void updateQualification(@RequestBody QualificationDto qualificationDto){
+    public void updateQualification(@RequestBody QualificationDTO qualificationDto){
         qualificationService.updateQualification(qualificationDto);
     }
 

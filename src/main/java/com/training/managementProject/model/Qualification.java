@@ -1,8 +1,6 @@
 package com.training.managementProject.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,7 +20,7 @@ import java.util.List;
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Entity
-public class Qualification {
+public class Qualification implements Cloneable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -31,4 +29,31 @@ public class Qualification {
     // Employee - Qualification Relation
     @ManyToMany(mappedBy = "qualifications")
     private List<Employee> employees = new ArrayList<>();
+
+    // Qualification - Task Relation
+    @ManyToMany(mappedBy = "qualifications")
+    private List<Task> tasks = new ArrayList<>();
+
+    public void addEmployee(Employee employee){
+        employees.add(employee);
+    }
+
+    public void deleteEmployee(Employee employee){
+        employees.remove(employee);
+    }
+
+    public void addTask(Task task){
+        tasks.add(task);
+    }
+
+    public void deleteTask(Task task){
+        tasks.remove(task);
+    }
+
+    @Override
+    public Qualification clone(){
+        Qualification qualification = new Qualification();
+        qualification.setName(this.name);
+        return qualification;
+    }
 }

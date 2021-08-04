@@ -4,11 +4,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.*;
 import lombok.*;
 import lombok.experimental.Accessors;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -49,7 +49,7 @@ public class Employee {
     private List<Project> projects = new ArrayList<>();
 
     // Employee - Qualification Relation
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "employee_qualification",
             joinColumns = @JoinColumn(name = "employee_id"),
@@ -66,6 +66,28 @@ public class Employee {
     )
     private List<Task> tasks = new ArrayList<>();
 
+    public void addQualification(Qualification qualification){
+        qualifications.add(qualification);
+    }
 
+    public void deleteQualification(Qualification qualification){
+        qualifications.remove(qualification);
+    }
+
+    public void addProject(Project project){
+        projects.add(project);
+    }
+
+    public void deleteProject(Project project){
+        projects.remove(project);
+    }
+
+    public void addTask(Task task){
+        tasks.add(task);
+    }
+
+    public void deleteTask(Task task){
+        tasks.remove(task);
+    }
 
 }

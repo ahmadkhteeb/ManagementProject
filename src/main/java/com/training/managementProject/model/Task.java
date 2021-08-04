@@ -1,8 +1,6 @@
 package com.training.managementProject.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,7 +20,7 @@ import java.util.List;
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Entity
-public class Task {
+public class Task implements Cloneable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,6 +30,10 @@ public class Task {
     private Date startTime;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date deadline;
+
+    @ManyToMany
+    @JoinColumn(name = "qualification_id")
+    private List<Qualification> qualifications = new ArrayList<>();
 
     // Employee - Task Relation
     @ManyToMany(mappedBy = "tasks")
@@ -49,8 +51,49 @@ public class Task {
     // Task - Task Relation
     @OneToMany(mappedBy = "superTask")
     private List<Task> subTasks = new ArrayList<>();
+
     @ManyToOne
     @JoinColumn(name = "subtask_id")
     private Task superTask;
 
+    public void addQualification(Qualification qualification){
+        qualifications.add(qualification);
+    }
+
+    public void deleteQualification(Qualification qualification){
+        qualifications.remove(qualification);
+    }
+
+    public void addEmployee(Employee employee){
+        employees.add(employee);
+    }
+
+    public void deleteEmployee(Employee employee){
+        employees.remove(employee);
+    }
+
+    public void addStatus(Status status){
+        statuses.add(status);
+    }
+
+    public void deleteStatus(Status status){
+        statuses.remove(status);
+    }
+
+    public void addSubTask(Task subTask){
+        subTasks.add(subTask);
+    }
+
+    public void deleteSubTask(Task subTask){
+        subTasks.remove(subTask);
+    }
+
+    @Override
+    protected Task clone() {
+        return new Task()
+                .setId(this.id)
+                .setName(this.name)
+                .setStartTime(this.startTime)
+                .setDeadline(this.deadline);
+    }
 }
