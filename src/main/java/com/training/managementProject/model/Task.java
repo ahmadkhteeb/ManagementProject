@@ -42,6 +42,7 @@ public class Task implements Cloneable {
     // Project - Task Relation
     @ManyToOne
     @JoinColumn(name = "project_id")
+    @ToString.Exclude
     private Project project;
 
     // Task - Status Relation

@@ -32,6 +32,7 @@ public class Project implements Cloneable {
 
     // Employee - Project Relation
     @ManyToMany(mappedBy = "projects")
+    @ToString.Exclude
     private List<Employee> employees = new ArrayList<>();
 
     // Project - Status Relation

@@ -28,6 +28,7 @@ public class Qualification implements Cloneable {
 
     // Employee - Qualification Relation
     @ManyToMany(mappedBy = "qualifications")
+    @ToString.Exclude
     private List<Employee> employees = new ArrayList<>();
 
     // Qualification - Task Relation

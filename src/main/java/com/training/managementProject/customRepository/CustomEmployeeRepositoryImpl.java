@@ -4,11 +4,14 @@ import com.training.managementProject.model.Employee;
 import com.training.managementProject.model.Project;
 import com.training.managementProject.model.Qualification;
 import com.training.managementProject.model.Task;
+import org.hibernate.Session;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import java.util.List;
 
 @Transactional
 public class CustomEmployeeRepositoryImpl implements CustomEmployeeRepository {
@@ -143,4 +146,15 @@ public class CustomEmployeeRepositoryImpl implements CustomEmployeeRepository {
             taskObject.deleteEmployee(employeeObject);
         }
     }
+
+    @Override
+    public List<Project> getProjects(Employee employee) {
+        Session session = em.unwrap(Session.class);
+
+        Query query = session.createQuery("FROM Project P JOIN P.employees E WHERE E.id = :employeeId");
+        query.setParameter("employeeId", employee.getId());
+        return query.getResultList();
+    }
+
+
 }

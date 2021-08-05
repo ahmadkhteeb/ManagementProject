@@ -37,6 +37,7 @@ public class Employee {
     // Employee - Department Relation
     @ManyToOne
     @JoinColumn(name = "department_id")
+    @ToString.Exclude
     private Department department;
 
     // Employee - Project Relation

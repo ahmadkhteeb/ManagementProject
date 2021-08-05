@@ -33,10 +33,12 @@ public class Status {
     // Project - Status Relation
     @ManyToOne
     @JoinColumn(name = "project_id")
+    @ToString.Exclude
     private Project project;
 
     // Task - Status Relation
     @ManyToOne
     @JoinColumn(name = "task_id")
+    @ToString.Exclude
     private Task task;
 }

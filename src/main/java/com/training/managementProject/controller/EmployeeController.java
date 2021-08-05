@@ -4,6 +4,7 @@ import com.training.managementProject.dto.model.EmployeeDTO;
 import com.training.managementProject.dto.model.ProjectDTO;
 import com.training.managementProject.dto.model.QualificationDTO;
 import com.training.managementProject.dto.model.TaskDTO;
+import com.training.managementProject.model.Employee;
 import com.training.managementProject.service.EmployeeService;
 import javassist.bytecode.DuplicateMemberException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,6 +77,11 @@ public class EmployeeController {
     @RequestMapping(method = RequestMethod.DELETE, path = "/api/v1/employees/deleteTask")
     public void deleteTask(@RequestBody TaskDTO taskDto){
         employeeService.deleteTask(taskDto);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, path = "/api/v1/employees/getProjects")
+    public List<ProjectDTO> getProjects(@RequestBody EmployeeDTO employeeDTO){
+        return employeeService.getProjects(employeeDTO);
     }
 
 }

@@ -89,4 +89,11 @@ public class EmployeeService {
         employeeRepository.deleteTask(ObjectMapperUtils.map(taskDto, Task.class));
     }
 
+    public List<ProjectDTO> getProjects(EmployeeDTO employeeDTO){
+        return ObjectMapperUtils.mapAll(
+                employeeRepository.getProjects(
+                        ObjectMapperUtils.map(employeeDTO, Employee.class)
+                ), ProjectDTO.class);
+    }
+
 }
