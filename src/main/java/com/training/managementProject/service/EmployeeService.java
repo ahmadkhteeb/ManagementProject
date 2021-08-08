@@ -31,14 +31,16 @@ public class EmployeeService {
 
     // Get all
     public List<EmployeeDTO> getEmployees(){
-        return ObjectMapperUtils.mapAll(employeeRepository.findAll(), EmployeeDTO.class);
+        return ObjectMapperUtils.mapAll(employeeRepository.findAll1(), EmployeeDTO.class);
     }
 
     // Get one
     public EmployeeDTO getEmployee(int id){
-        return ObjectMapperUtils.map(employeeRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundException("Cannot find Employee with the id " + id)
-        ), EmployeeDTO.class);
+        Employee employee = employeeRepository.findById1(id);
+        if(employee == null){
+            throw new EntityNotFoundException("Cannot find Employee with the id " + id);
+        }
+        return ObjectMapperUtils.map(employee, EmployeeDTO.class);
     }
 
     // Add
@@ -46,23 +48,23 @@ public class EmployeeService {
         if(employeeRepository.existsById(employee.getId()))
             throw new DuplicateMemberException("Employee with id " + employee.getId() + " already exists");
         else
-            employeeRepository.save(ObjectMapperUtils.map(employee, Employee.class));
+            employeeRepository.save1(ObjectMapperUtils.map(employee, Employee.class));
     }
 
     // Update
     public void updateEmployee(EmployeeDTO employee){
-        employeeRepository.findById(employee.getId()).orElseThrow(
-                () -> new EntityNotFoundException("Cannot find Employee with the id " + employee.getId())
-        );
-        employeeRepository.save(ObjectMapperUtils.map(employee, Employee.class));
+        if(employeeRepository.existsById(employee.getId()))
+            employeeRepository.save1(ObjectMapperUtils.map(employee, Employee.class));
+        else
+            throw new EntityNotFoundException("Cannot find Employee with the id " + employee.getId());
     }
 
     // Delete
     public void deleteEmployee(int id){
-        employeeRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundException("Cannot find Employee with the id " + id)
-        );
-        employeeRepository.deleteById(id);
+        if(employeeRepository.findById1(id) == null)
+            throw new EntityNotFoundException("Cannot find Employee with the id " + id);
+
+        employeeRepository.deleteById1(id);
     }
 
     public void addQualification(QualificationDTO qualificationDto) {

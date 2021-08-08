@@ -7,10 +7,7 @@ import com.training.managementProject.model.Task;
 import org.hibernate.Session;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityNotFoundException;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import javax.persistence.*;
 import java.util.List;
 
 @Transactional
@@ -145,6 +142,44 @@ public class CustomEmployeeRepositoryImpl implements CustomEmployeeRepository {
             employeeObject.deleteTask(taskObject);
             taskObject.deleteEmployee(employeeObject);
         }
+    }
+
+    @Override
+    public List<Employee> findAll1() {
+        Session session = em.unwrap(Session.class);
+
+        Query query = session.createQuery("FROM Employee E");
+        return query.getResultList();
+    }
+
+    @Override
+    public Employee findById1(int id) {
+        Session session = em.unwrap(Session.class);
+        try{
+            Query query = session.createQuery("FROM Employee E WHERE E.id = :employeeId");
+            query.setParameter("employeeId", id);
+            return (Employee) query.getSingleResult();
+        } catch (NoResultException e){
+            return null;
+        }
+    }
+
+    @Override
+    public void save1(Employee employee) {
+        Session session = em.unwrap(Session.class);
+        // save
+        if(employee.getId() == 0){
+            session.save(employee);
+        }else{// update
+            session.merge(employee);
+        }
+    }
+
+    @Override
+    public void deleteById1(int id) {
+        Session session = em.unwrap(Session.class);
+        Employee employee = session.get(Employee.class, id);
+        session.delete(employee);
     }
 
     @Override
