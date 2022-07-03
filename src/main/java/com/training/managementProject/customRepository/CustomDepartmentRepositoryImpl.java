@@ -23,6 +23,7 @@ public class CustomDepartmentRepositoryImpl implements CustomDepartmentRepositor
 
         if(department == null)
             throw new EntityNotFoundException("Cannot find Department with the id " + departmentId);
+
         // If the user is inserting a new employee
         if (employee.getId() == 0) {
             em.persist(employee);

@@ -1,23 +1,21 @@
 package com.training.managementProject.dto.mapper;
 
+import ma.glasnost.orika.MapperFacade;
+import ma.glasnost.orika.MapperFactory;
+import ma.glasnost.orika.impl.DefaultMapperFactory;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
+import org.springframework.stereotype.Component;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
 public class ObjectMapperUtils {
 
-    private static ModelMapper modelMapper = new ModelMapper();
-
-    /**
-     * Model mapper property setting are specified in the following block.
-     * Default property matching strategy is set to Strict see {@link MatchingStrategies}
-     * Custom mappings are added using {@link ModelMapper#addMappings(PropertyMap)}
-     */
-    static {
-        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-    }
+    private static MapperFactory mapperFactory = new DefaultMapperFactory.Builder().build();
+    private static MapperFacade modelMapper = mapperFactory.getMapperFacade();
 
     /**
      * Hide from public usage.
